@@ -170,7 +170,7 @@ print("---執行結束...")
 driver.quit()
 
 #產生pdf
-from fpdf import FPDF
+from fpdf import FPDF,HTMLMixin
 import glob
 xx=['一','二','三','四','五']
 #A4高度335
@@ -180,15 +180,25 @@ for i in xx:
   filename=(glob.glob("./img/步驟"+i+"*.png")) #步驟一到六
   filenames.append(filename[0])#放入陣列
 
-pdf = FPDF()
+class MyFPDF(FPDF, HTMLMixin):
+    pass
+
+pdf = MyFPDF()
 pdf.add_font('微軟正黑體','','微軟正黑體-1.ttf',True)
 pdf.set_font("微軟正黑體", size=12)
 
+html="""
+<br>
+<br>
+<img src="./img/封面.jpg" width="524" height="260">
+<br>
+"""
+
 pdf.add_page()
 pdf.write(10,title)
-pdf.image("./img/封面.jpg",x=0,y=30,w=190)
+pdf.write_html(html)
 pdf.write(10,content)
-pdf.image("./img/tick.jpg",x=75,y=230,w=50,h=50)
+pdf.image("./img/tick.jpg",x=150,y=230,w=50,h=50)
 
 pdf.add_page()
 pdf.text(10,10,"Welcome to kktix")
